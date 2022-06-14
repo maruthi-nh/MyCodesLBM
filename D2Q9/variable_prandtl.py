@@ -11,12 +11,14 @@ import D2Q9
 import sys
 
 def feq_iso(PartVel, Weights, PrimVars,  Feq):
-    '''to compute distribution function. Takes parti
+    """
+    To compute distribution function. Takes parti
     cle velocity, weights, and Primitive varibales 
     (rho, u, v) and gives Feq (equlibrium distributi
     on as output. PrimVars and Feq can be 1D array 
     or matrix (nD array). THis is taken from 
-    Quasi-Equilibrium Lattice Boltzmann Method, arXiv, 2007'''
+    Quasi-Equilibrium Lattice Boltzmann Method, arXiv, 2007
+    """
     
     # Usq = PrimVars[1]*PrimVars[1]+PrimVars[2]*PrimVars[2]
     
@@ -61,11 +63,13 @@ def feq_iso(PartVel, Weights, PrimVars,  Feq):
            
             
 def collision(dt, Omega1, Tau1, Tau2, PartVel, Weights, Grids, PrimVars, Feq, Fquasi_eq):
-    '''computes collision term of the LBM update 
+    """
+    computes collision term of the LBM update
     formula, i.e., f*=f+(alpha*beta)*(feq-f). Tak
     es beta, Particle Vel, Weights, Grid, PrimVar
     and Feq as inputs. This gives updated Grid as
-    output'''
+    output
+    """
     
     # D2Q9.CalEqbDistrFun(PartVel, Weights, PrimVars, Feq)
     feq_iso(PartVel, Weights, PrimVars, Feq)
@@ -77,11 +81,13 @@ def collision(dt, Omega1, Tau1, Tau2, PartVel, Weights, Grids, PrimVars, Feq, Fq
         
     
 def GetMoments(PartVel, Grids, PrimVars):
-    '''Get (rho, u, p) by taking moment
+    """
+    Get (rho, u, p) by taking moment
     of distribution fucntion. Takes part
     icle velocity, and Grids (distributi
     on fun) as input and gives PrimVars
-    (rho, u, v) as output'''
+    (rho, u, v) as output
+    """
     vel1=np.zeros(np.shape(PrimVars[1]))
     vel2=np.zeros(np.shape(PrimVars[2]))
     E=np.zeros(np.shape(PrimVars[3]))

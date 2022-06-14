@@ -1,1 +1,1 @@
-#1D Euler code using LBRS method
+#2D LBM code to solve lid driven cavity problem

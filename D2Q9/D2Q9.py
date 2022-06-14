@@ -9,11 +9,13 @@ import numpy as np
 import variable_prandtl as vp
 
 def CalEqbDistrFun(PartVel, Weights, PrimVars,  Feq):
-    '''to compute distribution function. Takes parti
+    """
+    To compute distribution function. Takes parti
     cle velocity, weights, and Primitive varibales 
     (rho, u, v) and gives Feq (equlibrium distributi
     on as output. PrimVars and Feq can be 1D array 
-    or matrix (nD array)'''
+    or matrix (nD array)
+    """
     for i in range(9):
         UdotC = PartVel[0][i]*PrimVars[1]+PartVel[1][i]*PrimVars[2]
         Usq = PrimVars[1]*PrimVars[1]+PrimVars[2]*PrimVars[2]
@@ -23,11 +25,13 @@ def CalEqbDistrFun(PartVel, Weights, PrimVars,  Feq):
 
      
 def GetMoments(PartVel, Grids, PrimVars):
-    '''Get (rho, u, p) by taking moment
+    """
+    Get (rho, u, p) by taking moment
     of distribution fucntion. Takes part
     icle velocity, and Grids (distributi
     on fun) as input and gives PrimVars
-    (rho, u, v) as output'''
+    (rho, u, v) as output
+    """
     vel1=np.zeros(np.shape(PrimVars[1]))
     vel2=np.zeros(np.shape(PrimVars[2]))
     
@@ -43,11 +47,13 @@ def GetMoments(PartVel, Grids, PrimVars):
     
     
 def Collision(Beta, PartVel, Weights, Tau, Grids, PrimVars, Feq):
-    '''computes collision term of the LBM update 
+    """
+    computes collision term of the LBM update
     formula, i.e., f*=f+(alpha*beta)*(feq-f). Tak
     es beta, Particle Vel, Weights, Grid, PrimVar
     and Feq as inputs. This gives updated Grid as
-    output'''
+    output
+    """
     # GetMoments(PartVel, Grids, PrimVars)
     CalEqbDistrFun(PartVel, Weights, PrimVars, Feq)
     # vp.feq_iso(PartVel, Weights, PrimVars,  Feq)
@@ -58,8 +64,9 @@ def Collision(Beta, PartVel, Weights, Tau, Grids, PrimVars, Feq):
         Grids[i]+=alpha*Beta*(Feq[i]-Grids[i])    
 
 def Advection(Grids):
-    '''Computes Grids after streaming
-    '''
+    """
+    Computes Grids after streaming
+    """
     len0, lenx, leny = np.shape(Grids)
     
     for j in range(0, leny-1):

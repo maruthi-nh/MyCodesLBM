@@ -9,11 +9,13 @@ import numpy as np
 import D2Q9
 
 def PrepareWall(Grids):
-   '''Values from interior domain are cop
+   """
+   Values from interior domain are cop
    ied to ghost nodes for applying bound
    ary conditions. So that we will have 
-   some relevant values at the ghose poi
-   nts'''
+   some relevant values at the ghose points
+   """
+
     #copy from right wall to the right ghost
    Grids[:,-1,:] = Grids[:,-2,:]
     
@@ -27,8 +29,10 @@ def PrepareWall(Grids):
    Grids[:,:,0] = Grids[:,:,1]
     
 def WallBcOnGridBounceBack(Grid):
-    '''To apply wall boundary con
-    ditions. Using bounce back method'''
+    """
+    To apply wall boundary con
+    ditions. Using bounce back method
+    """
     #bounce back from right wall
     Grid[3, -2, 2:-2] = Grid[1, -1, 2:-2]
     Grid[6, -2, 2:-2] = Grid[8, -1, 2:-2]
@@ -47,8 +51,10 @@ def WallBcOnGridBounceBack(Grid):
     
     
 def MovingWallBcOnGridBounceBack(Uwall, Weights, PartVel, PrimVars, Grids):    
-    '''moving wall boundary conditions. Implemented from Q. Zou, X.He: Phy
-    sc Fluids, 1997'''
+    """
+    Moving wall boundary conditions. Implemented from Q. Zou, X.He: Phy
+    sc Fluids, 1997
+    """
     
     # f[Ny][i][4] = f_post[Ny][i][2]
     # f[Ny][i][7] = f_post[Ny][i][5] + 6.0 * rho[Ny][i] * w[7] * cx[7] * Uwall;
@@ -118,7 +124,9 @@ def MovingWallBcOnGridBounceBack(Uwall, Weights, PartVel, PrimVars, Grids):
     
     
 def bc_periodic_x(Grid):
-    '''To apply periodic BC in x-dir'''
+    """
+    To apply periodic BC in x-dir
+    """
            
     #left wall 
     # Grid[1, -1, 1:-1] = Grid[1, 0, 1:-1]
@@ -142,8 +150,10 @@ def bc_periodic_x(Grid):
     
         
 def bc_bounceBack_bottomWall(Grid):
-    '''To apply wall boundary con
-    ditions. Using bounce back method'''
+    """
+    To apply wall boundary con
+    ditions. Using bounce back method
+    """
         
     #bottom wall
     Grid[2, 1:-1, 1] = Grid[4, 1:-1, 0]
