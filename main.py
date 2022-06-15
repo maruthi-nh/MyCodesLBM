@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Tue May 14 13:30:36 2019
-@author: maruthinh
 This is to simulate Lid driven cavity using D2Q9 LBM method
 
 Some important formulas:

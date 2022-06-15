@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Some important formulas:
     1. formula for kinematic viscosity nu = ((2*tau - 1)*(dx^2))/(6*dt)
@@ -12,15 +10,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-from d2q9 import D2Q9, advection
+from d2q9 import D2Q9
 from bc import BoundaryConditions
 from sim_params import SimParams
 
 # import data_output_functions as dop
 
 
-nx = 128
-ny = 128
+nx = 64
+ny = 64
 ghost_x = 2
 ghost_y = 2
 tot_nx = nx + ghost_x

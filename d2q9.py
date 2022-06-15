@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import numpy as np
 
 
@@ -22,15 +19,23 @@ class D2Q9:
         as output. PrimVars and Feq can be 1D array or matrix (nD array)
         """
 
-        f = np.zeros((self.q, moments.shape[1], moments.shape[2]))
+        # feq = np.zeros((self.q, moments.shape[1], moments.shape[2]))
 
-        for i in range(self.q):
-            udotc = self.c[0][i] * moments[1] + self.c[1][i] * moments[2]
-            usq = moments[1] * moments[1] + moments[2] * moments[2]
+        # for i in range(self.q):
+        #     udotc = self.c[0][i] * moments[1] + self.c[1][i] * moments[2]
+        #     usq = moments[1] * moments[1] + moments[2] * moments[2]
 
-            f[i] = self.w[i] * moments[0] * (1.0 + 3.0 * udotc - 1.5 * usq + 4.5 * udotc ** 2
+        #     feq[i] = self.w[i] * moments[0] * (1.0 + 3.0 * udotc - 1.5 * usq + 4.5 * udotc ** 2
+        #                                      + 4.5 * udotc ** 3 - 4.5 * usq * udotc)
+        # return feq
+        
+        feq = np.zeros((self.q, moments.shape[1], moments.shape[2]))
+            
+        udotc = (np.array([[self.c[0]]]).T*moments[1]) + (np.array([[self.c[1]]]).T*moments[2])
+        usq = moments[1] * moments[1] + moments[2] * moments[2]
+        feq = (np.array([[self.w]]).T*moments[0]) * (1.0 + 3.0 * udotc - 1.5 * usq + 4.5 * udotc ** 2
                                              + 4.5 * udotc ** 3 - 4.5 * usq * udotc)
-        return f
+        return feq
 
     def moments(self, f):
         """
@@ -41,13 +46,15 @@ class D2Q9:
         mom = np.zeros((3, f.shape[1], f.shape[2]))
 
         mom[0] = f.sum(axis=0)
+        mom[1] = (np.array([[self.c[0]]]).T*f).sum(axis=0)/mom[0]
+        mom[2] = (np.array([[self.c[1]]]).T*f).sum(axis=0)/mom[0]
+       
+        # for i in range(self.q):
+        #     mom[1] += f[i] * self.c[0, i]
+        #     mom[2] += f[i] * self.c[1, i]
 
-        for i in range(self.q):
-            mom[1] += f[i] * self.c[0, i]
-            mom[2] += f[i] * self.c[1, i]
-
-        mom[1] /= mom[0]
-        mom[2] /= mom[0]
+        # mom[1] /= mom[0]
+        # mom[2] /= mom[0]
 
         return mom
 
@@ -61,8 +68,12 @@ class D2Q9:
         feq = self.feq(self.moments(f))
 
         alpha = 2.0
-        for i in range(self.q):
-            f[i] += alpha * beta * (feq[i] - f[i])
+        # for i in range(self.q):
+            # f[i] += alpha * beta * (feq[i] - f[i])
+        
+        f += alpha * beta * (feq - f)
+        f.cumsum(axis=0)
+        
 
     @staticmethod
     def advection(f):
@@ -80,23 +91,23 @@ class D2Q9:
         f[5, -1:0:-1, -1:0:-1] = f[5, -2::-1, -2::-1]
         f[6, -2:0:-1, -1:0:-1] = f[6, -1:1:-1, -2::-1]
 
+    # @staticmethod
+    # def advection1(f):
+    #     """
+    #     Streaming of velocities
+    #     """
+    #     len0, lenx, leny = np.shape(f)
+        
+    #     for j in range(0, leny - 1):
+    #         for i in range(0, lenx - 1):
+    #             f[3, i, j] = f[3, i + 1, j]
+    #             f[4, i, j] = f[4, i, j + 1]
+    #             f[7, i, j] = f[7, i + 1, j + 1]
+    #             f[8, i, j] = f[8, i - 1, j + 1]
 
-def advection(f):
-    """
-    Streaming of velocities
-    """
-    len0, lenx, leny = np.shape(f)
-
-    for j in range(0, leny - 1):
-        for i in range(0, lenx - 1):
-            f[3, i, j] = f[3, i + 1, j]
-            f[4, i, j] = f[4, i, j + 1]
-            f[7, i, j] = f[7, i + 1, j + 1]
-            f[8, i, j] = f[8, i - 1, j + 1]
-
-    for j in range(leny - 2, 0, -1):
-        for i in range(lenx - 2, 0, -1):
-            f[1, i, j] = f[1, i - 1, j]
-            f[2, i, j] = f[2, i, j - 1]
-            f[5, i, j] = f[5, i - 1, j - 1]
-            f[6, i, j] = f[6, i + 1, j - 1]
+    #     for j in range(leny - 2, 0, -1):
+    #         for i in range(lenx - 2, 0, -1):
+    #             f[1, i, j] = f[1, i - 1, j]
+    #             f[2, i, j] = f[2, i, j - 1]
+    #             f[5, i, j] = f[5, i - 1, j - 1]
+    #             f[6, i, j] = f[6, i + 1, j - 1]

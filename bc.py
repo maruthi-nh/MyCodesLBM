@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 from d2q9 import D2Q9
 
 
@@ -88,56 +85,3 @@ class BoundaryConditions(D2Q9):
         self.f[1, 1, -2] = self.f[3, 1, -1]
         self.f[8, 1, -2] = self.f[6, 1, -1]
         self.f[4, 1, -2] = self.f[2, 1, -1]
-
-# def MovingWallBcOnGridBounceBack(Uwall, Weights, PartVel, PrimVars, f):
-        """
-        Moving wall boundary conditions. Implemented from Q. Zou, X.He: Phy
-    sc Fluids, 1997
-    """
-
-    # f[Ny][i][4] = f_post[Ny][i][2]
-    # f[Ny][i][7] = f_post[Ny][i][5] + 6.0 * rho[Ny][i] * w[7] * cx[7] * Uwall;
-    # f[Ny][i][8] = f_post[Ny][i][6] + 6.0 * rho[Ny][i] * w[8] * cx[8] * Uwall;
-
-    # f[4, 1:-1, -2] = f[2, 1:-1, -1]
-    # f[7, 1:-1, -2] = f[5, 1:-1, -1] + 6.0 * PrimVars[0, 1:-1, -1] * Weights[7] * PartVel[0][7] * Uwall
-    # f[8, 1:-1, -2] = f[6, 1:-1, -1] + 6.0 * PrimVars[0, 1:-1, -1] * Weights[8] * PartVel[0][8] * Uwall
-
-    # #first set like a solid wall
-    # Grids[4, 2:-2, -2] = Grids[2, 2:-2, -1]
-    # Grids[8, 2:-2, -2] = Grids[6, 2:-2, -1]
-    # Grids[7, 2:-2, -2] = Grids[5, 2:-2, -1]
-
-    # #now apply moving wall boundary conditions
-    # PrimVarTemp = np.array([1, Uwall, 0])
-
-    # feqTemp = np.zeros(9)
-    # D2Q9.CalEqbDistrFun(PartVel, Weights, PrimVarTemp, feqTemp)
-    # #print("priting in the BCs feq", feqTemp)
-
-    # denominator =1.0/(feqTemp[7]+feqTemp[4]+feqTemp[8])
-
-    # factor = Grids[2, 2:-2, -1] + Grids[6, 2:-2, -1] + Grids[5, 2:-2, -1]
-
-    # Grids[4, 2:-2, -2] = factor*denominator*feqTemp[4]
-    # Grids[8, 2:-2, -2] = factor*denominator*feqTemp[8]
-    # Grids[7, 2:-2, -2] = factor*denominator*feqTemp[7]
-    # #print(Grid)
-
-    # rhoTemp = 0
-    # rhoTemp = sum(Grids[:,1,-2])
-    # #print("rhoTemp=",rhoTemp)
-    # Grids[:, 1, -2] = feqTemp*rhoTemp
-
-    # #top right corner
-    # Grids[8, -2, -2] = Grids[6, -2, -1]
-    # Grids[6, -2, -2] = Grids[8, -2, -1]
-    # Grids[3, -2, -2] = Grids[1, -2, -1]
-    # Grids[7, -2, -2] = Grids[5, -2, -1]
-    # Grids[4, -2, -2] = Grids[2, -2, -1]
-
-    # rhoTemp = 0
-    # rhoTemp = sum(Grids[:,-2,-2])
-    # Grids[:,-2, -2] = feqTemp*rhoTemp
-
-
