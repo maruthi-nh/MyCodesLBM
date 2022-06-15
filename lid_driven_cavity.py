@@ -10,6 +10,7 @@ Some important formulas:
 
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 from d2q9 import D2Q9, advection
 from bc import BoundaryConditions
@@ -18,8 +19,8 @@ from sim_params import SimParams
 # import data_output_functions as dop
 
 
-nx = 100
-ny = 100
+nx = 128
+ny = 128
 ghost_x = 2
 ghost_y = 2
 tot_nx = nx + ghost_x
@@ -29,7 +30,7 @@ model = D2Q9()
 sim_params = SimParams(mach=0.1, reynolds_num=100, ref_len=1.0, res=0.02)
 q = model.q
 
-sim_time = 20000  # (40*Nx)/UtopWall
+sim_time = 1000  # (40*Nx)/UtopWall
 
 rho_ini = 1.0
 p = rho_ini * model.T0
@@ -52,7 +53,7 @@ f = model.feq(moments)
 bc = BoundaryConditions(f)
 iter = 0
 err = 1.0
-
+start = time.time()
 # while iter < int(sim_time):
 while(err>1e-6):
 
@@ -61,13 +62,13 @@ while(err>1e-6):
     # print(iter)
 
     model.collision(f, sim_params.beta)
-    BoundaryConditions(f)
-    advection(f)
+    bc = BoundaryConditions(f)
+    model.advection(f)
+    # advection(f)
     bc.bounce_back_left()
     bc.bounce_back_bottom()
     bc.bounce_back_right()
     bc.moving_wall_bc_top(sim_params.ref_vel)
-
 
     if iter % 1000 == 0:
         moments=model.moments(f)
@@ -78,16 +79,27 @@ while(err>1e-6):
     u0 = moments[1]
     v0 = moments[2]
 
-# to plot contours of normal velocity
-x = np.linspace(1, nx, nx)
-y = np.linspace(1, ny, ny)
-X, Y = np.meshgrid(x, y)
-VelNorm = np.sqrt(moments[1, 1:-1, 1:-1] * moments[1, 1:-1, 1:-1] + moments[2, 1:-1, 1:-1] * moments[2, 1:-1, 1:-1])
+print("total time taken: ", time.time()-start)
 
-cp = plt.contourf(X, Y, np.transpose(VelNorm), 10)
-plt.colorbar(cp)
-plt.xlabel('x')
-plt.ylabel('y')
+# to plot contours of normal velocity
+x = np.linspace(0, 1, nx)
+y = np.linspace(0, 1, ny)
+X, Y = np.meshgrid(x, y)
+VelNorm = np.sqrt(moments[1, 1:-1, 1:-1] * moments[1, 1:-1, 1:-1] 
+                  + moments[2, 1:-1, 1:-1] * moments[2, 1:-1, 1:-1])
+
+plt.figure()
+# cp = plt.contourf(X, Y, np.transpose(VelNorm), 25, cmap=plt.cm.viridis)
+cp = plt.contour(X, Y, np.transpose(VelNorm), 15)
+cbar=plt.colorbar(cp)
+cbar.set_label('Velocity', fontsize=12)
+plt.xlabel('x', fontsize=12)
+plt.ylabel('y', fontsize=12)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+plt.savefig('velocity_cont1.png', bbox_inches='tight')
+# plt.title('Velocity', fontsize=12)
+
 
 plt.figure()
 plt.plot(moments[1, int(nx / 2), 1:-1])

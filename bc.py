@@ -141,28 +141,3 @@ class BoundaryConditions(D2Q9):
     # Grids[:,-2, -2] = feqTemp*rhoTemp
 
 
-# def bc_periodic_x(Grid):
-#     """
-#     To apply periodic BC in x-dir
-#     """
-
-    # left wall
-    # Grid[1, -1, 1:-1] = Grid[1, 0, 1:-1]
-    # Grid[8, -1, 1:-1] = Grid[8, 0, 1:-1]
-    # Grid[5, -1, 1:-1] = Grid[5, 0, 1:-1]
-
-    # left wall
-    # Grid[6, 0, 1:-1] = Grid[6, -1, 1:-1]
-    # Grid[3, 0, 1:-1] = Grid[3, -1, 1:-1]
-    # Grid[7, 0, 1:-1] = Grid[7, -1, 1:-1]
-
-    # Grid[1, 0, 1:-1] = Grid[1, -1, 1:-1]
-    # Grid[8, 0, 1:-1] = Grid[8, -1, 1:-1]
-    # Grid[5, 0, 1:-1] = Grid[5, -1, 1:-1]
-    # 
-    # Grid[6, -1, 1:-1] = Grid[6, 0, 1:-1]
-    # Grid[3, -1, 1:-1] = Grid[3, 0, 1:-1]
-    # Grid[7, -1, 1:-1] = Grid[7, 0, 1:-1]
-
-
-
