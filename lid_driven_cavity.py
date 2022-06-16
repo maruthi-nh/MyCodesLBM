@@ -17,15 +17,16 @@ from sim_params import SimParams
 # import data_output_functions as dop
 
 
-nx = 64
-ny = 64
+nx = 96
+ny = 96
 ghost_x = 2
 ghost_y = 2
 tot_nx = nx + ghost_x
 tot_ny = ny + ghost_y
 ndim = 2
+ref_len=1.0
 model = D2Q9()
-sim_params = SimParams(mach=0.1, reynolds_num=100, ref_len=1.0, res=0.02)
+sim_params = SimParams(mach=0.1, reynolds_num=100, ref_len=ref_len, res=ref_len/nx)
 q = model.q
 
 sim_time = 1000  # (40*Nx)/UtopWall
