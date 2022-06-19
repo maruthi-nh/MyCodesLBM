@@ -12,14 +12,23 @@ class SimParams(D2Q9):
 
     @property
     def ref_vel(self):
+        """
+        Reference velocity
+        """
         return self.mach_num * self.a
 
     @property
     def knudsen(self):
+        """
+        Knudsen number
+        """
         return self.mach_num / self.reynolds
 
     @property
     def nu(self):
+        """
+        Reference viscosity
+        """
         return self.ref_len * self.ref_vel / self.reynolds
 
     @property

@@ -54,7 +54,7 @@ iter = 0
 err = 1.0
 start = time.time()
 # while iter < int(sim_time):
-while(err>1e-6):
+while err>1e-6:
 
     # while(iter<int(100)):
     iter = iter + 1
@@ -70,7 +70,7 @@ while(err>1e-6):
     bc.moving_wall_bc_top(sim_params.ref_vel)
 
     if iter % 1000 == 0:
-        moments=model.moments(f)
+        moments = model.moments(f)
         e1 = np.sum(np.sqrt((moments[1] - u0) ** 2 + (moments[2] - v0) ** 2))
         e2 = np.sum(np.sqrt(moments[1] ** 2 + moments[2] ** 2))
         err = e1 / e2

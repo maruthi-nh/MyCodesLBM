@@ -1,16 +1,24 @@
+import mpi4py.MPI
+
 from d2q9 import D2Q9
 
 
 class BoundaryConditions(D2Q9):
 
-    def __init__(self, f):
+    def __init__(self, f, comm: mpi4py.MPI.COMM_WORLD):
+        self.comm = comm
         self.f = f
+        self.size = comm.Get_size()
+        self.rank = comm.Get_rank()
+        # if self.rank == 0:
         self.f[:, 0, :] = self.f[:, 1, :]
+        # elif self.rank == self.size - 1:
+        self.f[:, :, -1] = self.f[:, :, -2]
         self.f[:, -1, :] = self.f[:, -2, :]
         self.f[:, :, 0] = self.f[:, :, 1]
-        self.f[:, :, -1] = self.f[:, :, -2]
+
         D2Q9.__init__(self)
-        
+
     def periodic_in_x(self):
         """
         To apply periodic boundary condition in x
@@ -51,7 +59,7 @@ class BoundaryConditions(D2Q9):
         """
         Apply moving wall bounce back on top wall
         """
-        density=self.f.sum(axis=0)
+        density = self.f.sum(axis=0)
         self.f[4, 1:-1, -2] = self.f[2, 1:-1, -1]
         self.f[7, 1:-1, -2] = self.f[5, 1:-1, -1] + 6.0 * density[1:-1, -1] * self.w[7] * self.c[0][7] * u_wall
         self.f[8, 1:-1, -2] = self.f[6, 1:-1, -1] + 6.0 * density[1:-1, -1] * self.w[8] * self.c[0][8] * u_wall
